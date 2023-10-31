@@ -1,10 +1,11 @@
 const postmark = require('postmark');
+const fs = require('fs');
+const template = fs.readFileSync('/Users/antipaeorg/WebstormProjects/prooviAPI/back/email/templates/confirmation-template.html','utf8')
 
 //const client = new postmark.ServerClient("960bc81d-d202-4403-9226-d16e335154ec");
 
 const client = new postmark.ServerClient(process.env.POSTMARK);
-console.log(process.env.POSTMARK);
-
+//console.log(process.env.POSTMARK);
 const sendEmail = async (req, res) => {
     try {
         console.log(req.body);
@@ -12,9 +13,9 @@ const sendEmail = async (req, res) => {
 
         await client.sendEmail({
             "From": "anti.paeorg@moduulo.com",
-            "To": "anti.paeorg@moduulo.com",
+            "To": "antipaeorg1@hotmail.com",
             "Subject": "Hello from Postmark",
-            "HtmlBody": "<strong>Hello</strong> dear Postmark user.",
+            "HtmlBody": template,
             "TextBody": "Hello from Postmark!",
             "MessageStream": "outbound"
         });
@@ -48,9 +49,15 @@ const sendEmailTo = async (to) => {
         res.status(500).json({message: 'BAD IMPLEMENTATION'});
     }
 };
+const validateAccount = async (req, res) => {
+    const userdata = req.body;
+    console.log(userdata)
+    res.json({ message: 'Form submitted successfully' });
+};
 
 
 module.exports = {
     sendEmail,
-    sendEmailTo
+    sendEmailTo,
+    validateAccount
 };

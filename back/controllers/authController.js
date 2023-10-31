@@ -1,9 +1,9 @@
-
 const usersData = require('../usersData');
 const handleRegistrationValidation = require('./registrationValidator/registrationValidator');
 const handleLoginValidation = require('./loginValidator/loginValidator');
 const emailController = require('../controllers/emailController');
 const passwordUtil = require('../utils/passwordUtil')
+
 
 
 const register = async (req, res) => {
@@ -83,6 +83,8 @@ const resetPassword = async (req, res) => {
         res.status(500).json({message: 'BAD IMPLEMENTATION'});
     }
 }
+
+
 
 
 module.exports = {
