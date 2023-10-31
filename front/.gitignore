@@ -1,0 +1,14 @@
+# Ignore Node.js modules
+node_modules/
+
+# Ignore generated build output
+/build/
+
+# Ignore editor-specific files
+.idea/
+.vscode/
+*.sublime-workspace
+
+# Ignore operating system generated files
+.DS_Store
+Thumbs.db
