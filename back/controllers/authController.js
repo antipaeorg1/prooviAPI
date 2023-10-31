@@ -1,5 +1,3 @@
-const express = require('express');
-
 
 const usersData = require('../usersData');
 const handleRegistrationValidation = require('./registrationValidator/registrationValidator');
@@ -20,18 +18,22 @@ const register = async (req, res) => {
 
 //TODO: send greeting to user via email and also validation link
         console.log('email and password are valid!');
-        passwordUtil.hashPassword(req.body.userPassword,(error,userHashedPassword) => {
-            if(error) {
+        passwordUtil.hashPassword(req.body.userPassword, (error, userHashedPassword) => {
+            if (error) {
                 res.status(500).json({error: 'Password hashing failed'});
             } else {
-                usersData.push({userEmail: req.body.userEmail, userPassword: userHashedPassword});
+                usersData.push({userEmail: req.body.userEmail, userPassword: userHashedPassword, authenticated: false});
                 console.log(usersData)
             }
         })
 
-        await new emailController.sendEmailTo(req.body.userEmail);
+        emailController.sendEmailTo(req.body.userEmail).then(() => {
+            res.status(200).json({message: 'user registered!'});
+        })
+            .catch((error) => {
+                res.status(500).json({error: 'Email sending failed', emailError: error});
+            });
 
-        res.status(200).json({message: 'user registered!'});
 
     } catch (error) {
         console.error(error);
