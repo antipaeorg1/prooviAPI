@@ -1,17 +1,21 @@
-const emailValidation = require('../emailValidation/emailValidator');
-const passwordValidation = require('../passwordValidation/passwordValidator');
+const bcrypt = require('bcrypt');
+const usersData = require('../../usersData');
 
 
 function handleLogin(userEmail, userPassword) {
+    const user = usersData.find((user) => user.userEmail === userEmail);
 
-    if (!emailValidation.isEmailInUse(userEmail)) {
+    if (!user) {
         return {error: 'Email not found. Please check your email address or register a new account.'};
     }
-    if (!passwordValidation.isPasswordRegistered(userPassword)) {
+
+    // Compare the provided password with the hashed password from the database
+    if (!bcrypt.compareSync(userPassword, user.userPassword)) {
         return {error: 'Incorrect password. Please check your password or reset your password if necessary.'};
     }
-    return null;
 
+
+    return null; // You can return the user data or a success message here
 }
 
 module.exports = handleLogin;

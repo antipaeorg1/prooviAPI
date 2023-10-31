@@ -1,18 +1,17 @@
 const express = require('express');
-const router = express.Router();
+
 
 const usersData = require('../usersData');
 const handleRegistrationValidation = require('./registrationValidator/registrationValidator');
-const handleLoginValidation = require('./loginValidator/loginValidator')
+const handleLoginValidation = require('./loginValidator/loginValidator');
+const emailController = require('../controllers/emailController');
+const passwordUtil = require('../utils/passwordUtil')
 
 
 const register = async (req, res) => {
     try {
-        // console.log(req.body);
-        let userEmail = req.body.userEmail;
-        let userPassword = req.body.userPassword;
 
-        const registrationError = handleRegistrationValidation(userEmail, userPassword);
+        const registrationError = handleRegistrationValidation(req.body.userEmail, req.body.userPassword);
 
         if (registrationError) {
             res.status(400).json(registrationError);
@@ -21,7 +20,16 @@ const register = async (req, res) => {
 
 //TODO: send greeting to user via email and also validation link
         console.log('email and password are valid!');
-        usersData.push(req.body);
+        passwordUtil.hashPassword(req.body.userPassword,(error,userHashedPassword) => {
+            if(error) {
+                res.status(500).json({error: 'Password hashing failed'});
+            } else {
+                usersData.push({userEmail: req.body.userEmail, userPassword: userHashedPassword});
+                console.log(usersData)
+            }
+        })
+
+        await new emailController.sendEmailTo(req.body.userEmail);
 
         res.status(200).json({message: 'user registered!'});
 
@@ -64,10 +72,9 @@ const resetPassword = async (req, res) => {
             console.log(usersData);
             res.status(200).json({message: 'Password reset successfully!'})
         } else {
-            res.status(400).json({message:'Email does not exist!'})
+            res.status(400).json({message: 'Email does not exist!'})
         }
 
-        ;
     } catch (error) {
 
         console.error(error);
