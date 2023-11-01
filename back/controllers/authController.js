@@ -2,8 +2,7 @@ const usersData = require('../usersData');
 const handleRegistrationValidation = require('./registrationValidator/registrationValidator');
 const handleLoginValidation = require('./loginValidator/loginValidator');
 const emailController = require('../controllers/emailController');
-const passwordUtil = require('../utils/passwordUtil')
-
+const passwordUtil = require('../utils/passwordUtil');
 
 
 const register = async (req, res) => {
@@ -16,18 +15,18 @@ const register = async (req, res) => {
             return;
         }
 
-//TODO: send greeting to user via email and also validation link
+//TODO: validation link, currently email is sent only and authenticated = true
         console.log('email and password are valid!');
         passwordUtil.hashPassword(req.body.userPassword, (error, userHashedPassword) => {
             if (error) {
                 res.status(500).json({error: 'Password hashing failed'});
             } else {
-                usersData.push({userEmail: req.body.userEmail, userPassword: userHashedPassword, authenticated: false});
+                usersData.push({userEmail: req.body.userEmail, userPassword: userHashedPassword, authenticated: true});
                 console.log(usersData)
             }
         })
 
-        emailController.sendEmailTo(req.body.userEmail).then(() => {
+        emailController.sendEmailTo(req.body.userEmail, 'You have been successfully registered!').then(() => {
             res.status(200).json({message: 'user registered!'});
         })
             .catch((error) => {
@@ -70,9 +69,21 @@ const resetPassword = async (req, res) => {
         let userEmail = req.body.userEmail;
         let retrievedUser = usersData.find((user) => user.userEmail === userEmail)
         if (retrievedUser) {
-            retrievedUser.userPassword = 'newPasswordAssigned';
-            console.log(usersData);
-            res.status(200).json({message: 'Password reset successfully!'})
+
+            let newPassword = 'abcdefghij123'
+            passwordUtil.hashPassword(newPassword, (error, userNewHashedPassword) => {
+                if (error) {
+                    res.status(500).json({error: 'Password hashing failed'});
+                } else {
+                    retrievedUser.userPassword = userNewHashedPassword;
+                    console.log(usersData);
+                    emailController.sendEmailTo(userEmail, `Your new password is ${newPassword} `);
+                    res.status(200).json({message: 'Password reset successfully!'});
+                }
+
+            });
+            //retrievedUser.userPassword = 'newPasswordAssigned';
+
         } else {
             res.status(400).json({message: 'Email does not exist!'})
         }
@@ -83,8 +94,6 @@ const resetPassword = async (req, res) => {
         res.status(500).json({message: 'BAD IMPLEMENTATION'});
     }
 }
-
-
 
 
 module.exports = {
