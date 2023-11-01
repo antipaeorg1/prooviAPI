@@ -1,7 +1,7 @@
 const usersData = [
-    {userEmail: "anti.paeorg@moduulo.com", userPassword: "12345678", authenticated: false},
-    {userEmail: "anti.paeorg@moduulo.com", userPassword: "ABCDEFGHI", authenticated: false},
-    {userEmail: "anti.paeorg@moduulo.com", userPassword: "1234abcd", authenticated: false}
+    {userEmail: "test@moduulo.com", userPassword: "$2b$10$JNs8f02SCOmoBBr05bl3aeGP5ZA/ernFle4KQ.K8pdU1RFRsrrk8e", authenticated: false},
+    {userEmail: "test2@moduulo.com", userPassword: "$2b$10$JNs8f02SCOmoBBr05bl3aeGP5ZA/ernFle4KQ.K8pdU1RFRsrrk8e", authenticated: true},
+    {userEmail: "anti.paeorg@moduulo.com", userPassword: "$2b$10$JNs8f02SCOmoBBr05bl3aeGP5ZA/ernFle4KQ.K8pdU1RFRsrrk8e", authenticated: true}
 ];
 
 module.exports = usersData;

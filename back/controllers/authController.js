@@ -1,8 +1,11 @@
+const jwt = require('jsonwebtoken')
+
 const usersData = require('../usersData');
 const handleRegistrationValidation = require('./registrationValidator/registrationValidator');
 const handleLoginValidation = require('./loginValidator/loginValidator');
 const emailController = require('../controllers/emailController');
 const passwordUtil = require('../utils/passwordUtil');
+const {env} = require("../.eslintrc");
 
 
 const register = async (req, res) => {
@@ -25,14 +28,14 @@ const register = async (req, res) => {
                 console.log(usersData)
             }
         })
-
-        emailController.sendEmailTo(req.body.userEmail, 'You have been successfully registered!').then(() => {
-            res.status(200).json({message: 'user registered!'});
-        })
-            .catch((error) => {
-                res.status(500).json({error: 'Email sending failed', emailError: error});
-            });
-
+        //TODO: uncomment so email sending works again
+        // emailController.sendEmailTo(req.body.userEmail, 'You have been successfully registered!').then(() => {
+        //     res.status(200).json({message: 'user registered!'});
+        // })
+        //     .catch((error) => {
+        //         res.status(500).json({error: 'Email sending failed', emailError: error});
+        //     });
+        res.status(200).json({message: 'user registered!'});
 
     } catch (error) {
         console.error(error);
@@ -53,8 +56,16 @@ const login = async (req, res) => {
             return;
         }
 
-        //TODO: jwt token sending must be implemented
-        res.status(200).json({message: 'Login successful!'});
+        const user = usersData.find((user) => user.userEmail === userEmail);
+        if (user.authenticated === true) {
+
+            const accessToken = jwt.sign(user, process.env.JWT_ACCESS_TOKEN);
+            res.status(200).json({accessToken: accessToken});
+        } else {
+            return res.status(401).json({ error: 'User has not been authenticated!' });
+        }
+
+
     } catch (error) {
 
         console.error(error);

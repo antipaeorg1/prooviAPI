@@ -27,7 +27,6 @@ const sendEmail = async (req, res) => {
         console.error(error);
         res.status(500).json({message: 'BAD IMPLEMENTATION'});
     }
-
 };
 
 const sendEmailTo = async (to, emailText) => {
