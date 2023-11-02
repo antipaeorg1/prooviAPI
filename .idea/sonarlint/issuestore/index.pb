@@ -1,7 +1,5 @@
 
 G
-front/package-lock.json,4/0/40761d8dec5ea2b7101fa45a11d8ddbc0f213290
-G
 front/src/setupTests.js,9/5/95f5d55dd6e6bcfc3c8132278caaa09cf9f61077
 L
 front/src/reportWebVitals.js,8/4/84292613f8292295a0cd1a5e7ffd07bc5f8754c3
@@ -3847,7 +3845,3 @@ b
 2front/build/static/js/main.c43c6945.js.LICENSE.txt,0/f/0f86752b0ab497c92aa457eb6a2945563cb45516
 I
 front/build/manifest.json,8/8/88e3211309394cc3b83a566db73cf5fee8ae76f9
-S
-#.idea/sonarlint/issuestore/index.pb,9/f/9fe84ebb15faf917b7def6236dba604453cc61e0
-]
--.idea/sonarlint/securityhotspotstore/index.pb,8/8/88a9255124c95bdc913197c120a8d560edc59c8e

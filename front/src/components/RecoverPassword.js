@@ -1,16 +1,19 @@
 import * as React from 'react';
-import {useState} from "react";
+import {Link, useNavigate} from 'react-router-dom';
+import {useState} from 'react';
+import axios from "axios";
+import Alert from '@mui/material/Alert';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import {Link, useNavigate} from 'react-router-dom';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import {createTheme, ThemeProvider} from '@mui/material/styles';
+
 
 function Copyright(props) {
     return (
@@ -25,18 +28,53 @@ function Copyright(props) {
     );
 }
 
-// TODO remove, this demo shouldn't need to reset the theme.
 
 const defaultTheme = createTheme();
 
 export default function SignInSide() {
 
     const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [alertIsVisible, setAlertIsVisible] = useState(false);
     const navigate = useNavigate();
-    function handleSubmit(){
-        navigate('/register');
-    };
+
+
+    function handleSubmit(e) {
+        e.preventDefault();
+        if (email === '') {
+            setAlertIsVisible(true);
+
+        } else {
+            setAlertIsVisible(false)
+
+            let data = {
+                userEmail: email
+            };
+
+            let config = {
+                method: 'POST',
+                maxBodyLength: Infinity,
+                url: 'http://localhost:3000/reset-password',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
+                },
+                data: data
+            };
+
+            axios.request(config)
+                .then((response) => {
+                    console.log(JSON.stringify(response.data));
+                    setTimeout(() => {
+                        navigate('/')
+                    },2000)
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
+    }
+
+
 
     return (
         <ThemeProvider theme={defaultTheme}>
@@ -57,6 +95,9 @@ export default function SignInSide() {
                     }}
                 />
                 <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+                    {alertIsVisible && (
+                        <Alert severity="warning">Please fill in the Email</Alert>
+                    )}
                     <Box
                         sx={{
                             my: 8,
@@ -70,9 +111,9 @@ export default function SignInSide() {
                             <LockOutlinedIcon/>
                         </Avatar>
                         <Typography component="h1" variant="h5">
-                            Sign in
+                            Recover Password
                         </Typography>
-                        <Box component="form" noValidate onSubmit={handleSubmit} sx={{mt: 1}}>
+                        <Box component="form" sx={{mt: 1}}>
                             <TextField
                                 margin="normal"
                                 required
@@ -84,34 +125,24 @@ export default function SignInSide() {
                                 autoFocus
                                 onChange={(e) => setEmail(e.target.value)}
                             />
-                            <TextField
-                                margin="normal"
-                                required
-                                fullWidth
-                                name="password"
-                                label="Password"
-                                type="password"
-                                id="password"
-                                autoComplete="current-password"
-                                onChange={(e) => setPassword(e.target.value)}
-                            />
                             <Button
                                 type="submit"
                                 fullWidth
                                 variant="contained"
                                 sx={{mt: 3, mb: 2}}
+                                onClick={(e) => handleSubmit(e)}
                             >
-                                Sign In
+                                Send Password to Email
                             </Button>
-                            <Grid container>
-                                <Grid item xs>
-                                    <Link to="/recover-password" variant="body2">
-                                        Forgot password?
+                            <Grid container alignItems="center" justifyContent="center" spacing={3}>
+                                <Grid item>
+                                    <Link to="/" variant="body2">
+                                        Login
                                     </Link>
                                 </Grid>
                                 <Grid item>
                                     <Link to="/register" variant="body2">
-                                        {"Don't have an account? Sign Up"}
+                                        Sign up
                                     </Link>
                                 </Grid>
                             </Grid>

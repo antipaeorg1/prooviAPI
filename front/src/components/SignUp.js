@@ -1,4 +1,7 @@
 import * as React from 'react';
+import {useState} from "react";
+import {useNavigate} from "react-router-dom";
+import axios from 'axios';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -9,8 +12,8 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import {useState} from "react";
+import {createTheme, ThemeProvider} from '@mui/material/styles';
+import Alert from "@mui/material/Alert";
 
 function Copyright(props) {
     return (
@@ -25,7 +28,6 @@ function Copyright(props) {
     );
 }
 
-// TODO remove, this demo shouldn't need to reset the theme.
 
 const defaultTheme = createTheme();
 
@@ -35,21 +37,61 @@ export default function SignUp() {
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [confirmationPassword, setConfirmationPassword] = useState('');
+    const [alertIsVisible, setAlertIsVisible] = useState(false);
+    const [alertText, setAlertText] = useState('');
+    const navigate = useNavigate();
+
+    function handleSubmit(e) {
+        e.preventDefault();
+        if (password !== confirmationPassword) {
+            setAlertText('Passwords do not match!')
+            setAlertIsVisible(true);
+            return;
+        }
+        if (firstName === '' || lastName === '' || email === '' || password === '' || confirmationPassword === '') {
+            setAlertText('Please fill in all the fields!');
+            setAlertIsVisible(true);
+            return;
+        }
 
 
-    const handleSubmit = (event) => {
-       /* event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get('email'),
-            password: data.get('password'),
-        });*/
-    };
+        setAlertText('');
+        setAlertIsVisible('');
+
+        let data = {
+            firstName: firstName,
+            lastName: lastName,
+            userEmail: email,
+            userPassword: password
+        };
+
+        let config = {
+            method: 'POST',
+            maxBodyLength: Infinity,
+            url: 'http://localhost:3000/register',
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            },
+            data: data
+        };
+
+        axios.request(config)
+            .then((response) => {
+                console.log(JSON.stringify(response.data));
+                navigate('/')
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+
 
     return (
         <ThemeProvider theme={defaultTheme}>
             <Container component="main" maxWidth="xs">
-                <CssBaseline />
+                <CssBaseline/>
                 <Box
                     sx={{
                         marginTop: 8,
@@ -58,13 +100,16 @@ export default function SignUp() {
                         alignItems: 'center',
                     }}
                 >
-                    <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-                        <LockOutlinedIcon />
+                    {alertIsVisible && (
+                        <Alert severity="warning">{alertText}</Alert>
+                    )}
+                    <Avatar sx={{m: 1, bgcolor: 'secondary.main'}}>
+                        <LockOutlinedIcon/>
                     </Avatar>
                     <Typography component="h1" variant="h5">
                         Sign up
                     </Typography>
-                    <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+                    <Box component='form' sx={{mt: 3}}>
                         <Grid container spacing={2}>
                             <Grid item xs={12} sm={6}>
                                 <TextField
@@ -112,12 +157,25 @@ export default function SignUp() {
                                     onChange={(e) => setPassword(e.target.value)}
                                 />
                             </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    required
+                                    fullWidth
+                                    name="confirmationPassword"
+                                    label="Confirm Password"
+                                    type="password"
+                                    id="confirmationPassword"
+                                    autoComplete="new-password"
+                                    onChange={(e) => setConfirmationPassword(e.target.value)}
+                                />
+                            </Grid>
                         </Grid>
                         <Button
                             type="submit"
                             fullWidth
                             variant="contained"
-                            sx={{ mt: 3, mb: 2 }}
+                            sx={{mt: 3, mb: 2}}
+                            onClick={(e) => handleSubmit(e)}
                         >
                             Sign Up
                         </Button>
@@ -130,8 +188,8 @@ export default function SignUp() {
                         </Grid>
                     </Box>
                 </Box>
-                <Copyright sx={{ mt: 5 }} />
+                <Copyright sx={{mt: 5}}/>
             </Container>
         </ThemeProvider>
     );
-}
+};

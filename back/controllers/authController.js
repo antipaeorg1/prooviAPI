@@ -35,6 +35,7 @@ const register = async (req, res) => {
             }
         })
         //TODO: uncomment so email sending works again
+
         // emailController.sendEmailTo(req.body.userEmail, 'You have been successfully registered!').then(() => {
         //     res.status(200).json({message: 'user registered!'});
         // })
@@ -63,14 +64,13 @@ const login = async (req, res) => {
         }
 
         const user = usersData.find((user) => user.userEmail === userEmail);
-        if (user.authenticated === true) {
-
-            const accessToken = jwt.sign(user, process.env.JWT_ACCESS_TOKEN);
-            res.status(200).json({accessToken: accessToken});
-        } else {
+        if (user.authenticated === false) {
             return res.status(401).json({error: 'User has not been authenticated!'});
         }
 
+
+        const accessToken = jwt.sign(user, process.env.JWT_ACCESS_TOKEN);
+        res.status(200).json({accessToken: accessToken});
 
     } catch (error) {
 
@@ -94,10 +94,12 @@ const resetPassword = async (req, res) => {
                 } else {
                     retrievedUser.userPassword = userNewHashedPassword;
                     console.log(usersData);
-                    emailController.sendEmailTo(userEmail, `Your new password is ${newPassword} `);
+                    //TODO: uncomment for sending emails
+
+                    // emailController.sendEmailTo(userEmail, `Your new password is ${newPassword} `);
+                    res.setHeader('Content-Type', 'application/json');
                     res.status(200).json({message: 'Password reset successfully!'});
                 }
-
             });
 
         } else {

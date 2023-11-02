@@ -1,7 +1,5 @@
 
 G
-front/package-lock.json,4/0/40761d8dec5ea2b7101fa45a11d8ddbc0f213290
-G
 front/src/setupTests.js,9/5/95f5d55dd6e6bcfc3c8132278caaa09cf9f61077
 L
 front/src/reportWebVitals.js,8/4/84292613f8292295a0cd1a5e7ffd07bc5f8754c3
@@ -3847,7 +3845,3 @@ V
 &front/node_modules/throat/package.json,d/3/d31e5d63dff42affb42b47df07309551bf7ebd1c
 T
 $front/node_modules/throat/index.d.ts,c/8/c8cd91d5d8aefb56304ff45c3b75cb05b8874524
-S
-#.idea/sonarlint/issuestore/index.pb,9/f/9fe84ebb15faf917b7def6236dba604453cc61e0
-]
--.idea/sonarlint/securityhotspotstore/index.pb,8/8/88a9255124c95bdc913197c120a8d560edc59c8e
