@@ -24,7 +24,13 @@ const register = async (req, res) => {
             if (error) {
                 res.status(500).json({error: 'Password hashing failed'});
             } else {
-                usersData.push({userEmail: req.body.userEmail, userPassword: userHashedPassword, authenticated: true});
+                usersData.push({
+                    firstName: req.body.firstName,
+                    lastName: req.body.lastName,
+                    userEmail: req.body.userEmail,
+                    userPassword: userHashedPassword,
+                    authenticated: true
+                });
                 console.log(usersData)
             }
         })
@@ -62,7 +68,7 @@ const login = async (req, res) => {
             const accessToken = jwt.sign(user, process.env.JWT_ACCESS_TOKEN);
             res.status(200).json({accessToken: accessToken});
         } else {
-            return res.status(401).json({ error: 'User has not been authenticated!' });
+            return res.status(401).json({error: 'User has not been authenticated!'});
         }
 
 
@@ -93,7 +99,6 @@ const resetPassword = async (req, res) => {
                 }
 
             });
-            //retrievedUser.userPassword = 'newPasswordAssigned';
 
         } else {
             res.status(400).json({message: 'Email does not exist!'})
