@@ -6,12 +6,12 @@ function handleLogin(userEmail, userPassword) {
     const user = usersData.find((user) => user.userEmail === userEmail);
 
     if (!user) {
-        return {error: 'Email not found. Please check your email address or register a new account.'};
+        return {message: 'Email not found. Please check your email address or register a new account.'};
     }
 
     // Compare the provided password with the hashed password from the database
     if (!bcrypt.compareSync(userPassword, user.userPassword)) {
-        return {error: 'Incorrect password. Please check your password or reset your password if necessary.'};
+        return {message: 'Incorrect password. Please check your password or reset your password if necessary.'};
     }
 
 

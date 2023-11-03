@@ -15,6 +15,7 @@ import Typography from '@mui/material/Typography';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 
 
+
 function Copyright(props) {
     return (
         <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -35,17 +36,30 @@ export default function SignInSide() {
 
     const [email, setEmail] = useState('');
     const [alertIsVisible, setAlertIsVisible] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
+    const [severity, setSeverity] = useState('warning');
     const navigate = useNavigate();
 
+
+    function showAlert(severity, message) {
+        setSeverity(severity);
+        setAlertMessage(message);
+        setAlertIsVisible(true);
+    }
+    function resetAlert() {
+        setAlertMessage('');
+        setAlertMessage('');
+        setSeverity('');
+    }
 
     function handleSubmit(e) {
         e.preventDefault();
         if (email === '') {
-            setAlertIsVisible(true);
+            showAlert('warning', 'Please fill in Email');
 
         } else {
-            setAlertIsVisible(false)
 
+            resetAlert();
             let data = {
                 userEmail: email
             };
@@ -64,12 +78,17 @@ export default function SignInSide() {
             axios.request(config)
                 .then((response) => {
                     console.log(JSON.stringify(response.data));
+                    showAlert('success', response.data.message.toString())
                     setTimeout(() => {
-                        navigate('/')
-                    },2000)
+                        navigate('/');
+                    },3000)
                 })
                 .catch((error) => {
+                    showAlert('error',JSON.stringify(error.response.data.message))
                     console.log(error);
+                    setTimeout(() => {
+                        window.location.reload();
+                    },3000)
                 });
         }
     }
@@ -96,8 +115,9 @@ export default function SignInSide() {
                 />
                 <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
                     {alertIsVisible && (
-                        <Alert severity="warning">Please fill in the Email</Alert>
+                        <Alert severity={severity}>{alertMessage}</Alert>
                     )}
+
                     <Box
                         sx={{
                             my: 8,

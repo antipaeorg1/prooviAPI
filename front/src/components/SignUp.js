@@ -39,26 +39,38 @@ export default function SignUp() {
     const [password, setPassword] = useState('');
     const [confirmationPassword, setConfirmationPassword] = useState('');
     const [alertIsVisible, setAlertIsVisible] = useState(false);
-    const [alertText, setAlertText] = useState('');
+    const [alertMessage, setAlertMessage] = useState('');
+    const [severity, setSeverity] = useState('warning');
     const navigate = useNavigate();
+
+    function showAlert(severity, message) {
+        setSeverity(severity);
+        setAlertMessage(message);
+        setAlertIsVisible(true);
+    }
+    function resetAlert() {
+        setAlertMessage('');
+        setAlertMessage('');
+        setSeverity('');
+    }
+
+
+
+
+
 
     function handleSubmit(e) {
         e.preventDefault();
         if (password !== confirmationPassword) {
-            setAlertText('Passwords do not match!')
-            setAlertIsVisible(true);
+            showAlert('warning', 'Passwords do not match!');
             return;
         }
         if (firstName === '' || lastName === '' || email === '' || password === '' || confirmationPassword === '') {
-            setAlertText('Please fill in all the fields!');
-            setAlertIsVisible(true);
+            showAlert('warning', 'Please fill in all the fields!');
             return;
         }
 
-
-        setAlertText('');
-        setAlertIsVisible('');
-
+        resetAlert();
         let data = {
             firstName: firstName,
             lastName: lastName,
@@ -80,10 +92,17 @@ export default function SignUp() {
         axios.request(config)
             .then((response) => {
                 console.log(JSON.stringify(response.data));
-                navigate('/')
+                showAlert('success', response.data.message)
+                setTimeout(() => {
+                    navigate('/')
+                },3000)
             })
             .catch((error) => {
+                showAlert('error',JSON.stringify(error.response.data.message))
                 console.log(error);
+                setTimeout(() => {
+                    window.location.reload();
+                },3000)
             });
     }
 
@@ -101,7 +120,7 @@ export default function SignUp() {
                     }}
                 >
                     {alertIsVisible && (
-                        <Alert severity="warning">{alertText}</Alert>
+                        <Alert severity={severity}>{alertMessage}</Alert>
                     )}
                     <Avatar sx={{m: 1, bgcolor: 'secondary.main'}}>
                         <LockOutlinedIcon/>

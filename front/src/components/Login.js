@@ -11,6 +11,8 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import axios from "axios";
+import Alert from "@mui/material/Alert";
 
 function Copyright(props) {
     return (
@@ -34,9 +36,58 @@ export default function SignInSide() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
-    function handleSubmit(){
-        navigate('/register');
-    };
+    const [alertIsVisible, setAlertIsVisible] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
+    const [severity, setSeverity] = useState('warning');
+    function showAlert(severity, message) {
+        setSeverity(severity);
+        setAlertMessage(message);
+        setAlertIsVisible(true);
+    }
+    function resetAlert() {
+        setAlertMessage('');
+        setAlertMessage('');
+        setSeverity('');
+    }
+    function handleSubmit(e) {
+        e.preventDefault();
+
+        if (email === '' || password === '') {
+            showAlert('warning', 'Please fill in all the fields!');
+            return;
+        }
+
+        resetAlert();
+        let data = {
+            userEmail: email,
+            userPassword: password
+        };
+
+        let config = {
+            method: 'POST',
+            maxBodyLength: Infinity,
+            url: 'http://localhost:3000/login',
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            },
+            data: data
+        };
+
+        axios.request(config)
+            .then((response) => {
+                // console.log(JSON.stringify(response.data.accessToken));
+                showAlert('success', "You have been successfully logged in!")
+                sessionStorage.setItem('accessToken', response.data.accessToken);
+                // setTimeout(() => {
+                //     navigate('/')
+                // },3000)
+            })
+            .catch((error) => {
+                showAlert('error',JSON.stringify(error.response.data.message))
+                console.log(error);
+            });
+    }
 
     return (
         <ThemeProvider theme={defaultTheme}>
@@ -66,13 +117,16 @@ export default function SignInSide() {
                             alignItems: 'center',
                         }}
                     >
+                        {alertIsVisible && (
+                            <Alert severity={severity}>{alertMessage}</Alert>
+                        )}
                         <Avatar sx={{m: 1, bgcolor: 'secondary.main'}}>
                             <LockOutlinedIcon/>
                         </Avatar>
                         <Typography component="h1" variant="h5">
                             Sign in
                         </Typography>
-                        <Box component="form" noValidate onSubmit={handleSubmit} sx={{mt: 1}}>
+                        <Box component="form" sx={{mt: 1}}>
                             <TextField
                                 margin="normal"
                                 required
@@ -100,6 +154,7 @@ export default function SignInSide() {
                                 fullWidth
                                 variant="contained"
                                 sx={{mt: 3, mb: 2}}
+                                onClick={(e) => handleSubmit(e)}
                             >
                                 Sign In
                             </Button>

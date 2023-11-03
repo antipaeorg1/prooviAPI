@@ -22,7 +22,7 @@ const register = async (req, res) => {
         console.log('email and password are valid!');
         passwordUtil.hashPassword(req.body.userPassword, (error, userHashedPassword) => {
             if (error) {
-                res.status(500).json({error: 'Password hashing failed'});
+                res.status(500).json({message: 'Password hashing failed'});
             } else {
                 usersData.push({
                     firstName: req.body.firstName,
@@ -65,7 +65,7 @@ const login = async (req, res) => {
 
         const user = usersData.find((user) => user.userEmail === userEmail);
         if (user.authenticated === false) {
-            return res.status(401).json({error: 'User has not been authenticated!'});
+            return res.status(401).json({message: 'User has not been authenticated!'});
         }
 
 
@@ -90,7 +90,7 @@ const resetPassword = async (req, res) => {
             let newPassword = 'abcdefghij123'
             passwordUtil.hashPassword(newPassword, (error, userNewHashedPassword) => {
                 if (error) {
-                    res.status(500).json({error: 'Password hashing failed'});
+                    res.status(500).json({message: 'Password hashing failed'});
                 } else {
                     retrievedUser.userPassword = userNewHashedPassword;
                     console.log(usersData);
