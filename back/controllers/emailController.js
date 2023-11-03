@@ -4,8 +4,9 @@ const handlebars = require('handlebars');
 const path = require('path');
 
 //unComment const client hardCoded API key if needed
-//const client = new postmark.ServerClient("960bc81d-d202-4403-9226-d16e335154ec");
-const client = new postmark.ServerClient(process.env.POSTMARK);
+// (only purpose for hardcoding is test case)
+const client = new postmark.ServerClient("960bc81d-d202-4403-9226-d16e335154ec");
+// const client = new postmark.ServerClient(process.env.POSTMARK);
 //console.log(process.env.POSTMARK);
 const emailTemplate = path.join(__dirname, '../email/templates/emailTemplate.handlebars');
 
