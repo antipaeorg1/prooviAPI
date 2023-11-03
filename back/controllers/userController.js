@@ -1,9 +1,11 @@
 const usersData = require("../usersData");
 
+
+//Function to get all users from an usersData array
 const getUserList = (req, res) => {
     try {
         const users = usersData;
-        console.log("users sent to front!")
+        // console.log("users sent to front!");
         res.status(200).json({users});
 
     } catch (error) {

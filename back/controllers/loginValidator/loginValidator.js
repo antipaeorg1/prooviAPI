@@ -15,7 +15,7 @@ function handleLogin(userEmail, userPassword) {
     }
 
 
-    return null; // You can return the user data or a success message here
+    return null;
 }
 
 module.exports = handleLogin;

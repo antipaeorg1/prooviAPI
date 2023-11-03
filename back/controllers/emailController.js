@@ -3,10 +3,12 @@ const fs = require('fs');
 const handlebars = require('handlebars');
 const path = require('path');
 
+//unComment const client hardCoded API key if needed
 //const client = new postmark.ServerClient("960bc81d-d202-4403-9226-d16e335154ec");
 const client = new postmark.ServerClient(process.env.POSTMARK);
 //console.log(process.env.POSTMARK);
 const emailTemplate = path.join(__dirname, '../email/templates/emailTemplate.handlebars');
+
 
 const sendEmail = async (req, res) => {
     try {
@@ -29,6 +31,7 @@ const sendEmail = async (req, res) => {
     }
 };
 
+//sendEmail function with dynamic template used in registration and password recovery
 const sendEmailTo = async (to, emailText) => {
     try {
         const templateSource = fs.readFileSync(emailTemplate, 'utf8');

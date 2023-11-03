@@ -8,6 +8,8 @@ function isPasswordRegistered(userPassword) {
     }
     return false;
 }
+
+//Password simple length validation
 function isPasswordValid(userPassword) {
     return userPassword.length >= 8
 }

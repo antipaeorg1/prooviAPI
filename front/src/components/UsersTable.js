@@ -6,6 +6,7 @@ import Box from "@mui/material/Box";
 import DeleteIcon from '@mui/icons-material/Delete';
 import Button from "@mui/material/Button";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import AddUserModal from "./AddUserModal";
 
 
 const UsersTable = () => {
@@ -13,6 +14,7 @@ const UsersTable = () => {
     const authToken = sessionStorage.getItem('accessToken');
     const [isDeleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [userToDelete, setUserToDelete] = useState('null');
+    const [isAddUserModalOpen, setAddUserModalOpen] = useState(false)
 
     useEffect(() => {
         let config = {
@@ -60,6 +62,11 @@ const UsersTable = () => {
             });
         setDeleteDialogOpen(false);
     }
+    const handleSaveUser = (userData) => {
+        // Send the user data to your API using axios or other methods
+        // You can also update your user list by adding the new user data to the state.
+        console.log('New user data:', userData);
+    };
 
 
     const columns = useMemo(() => [
@@ -109,6 +116,7 @@ const UsersTable = () => {
                         variant="outlined"
                         color="primary"
                         startIcon={<PersonAddIcon style={{ fontSize: '2rem' }}/>}
+                        onClick={() => setAddUserModalOpen(true) }
                     >
                         Add New User
                     </Button>
@@ -116,6 +124,13 @@ const UsersTable = () => {
             </div>
 
             <MaterialReactTable table={table}/>
+
+            <AddUserModal
+                isOpen={isAddUserModalOpen}
+                onClose={() => setAddUserModalOpen(false)}
+                onSave={handleSaveUser}
+            />
+
             <Dialog open={isDeleteDialogOpen} onClose={() => setDeleteDialogOpen(false)}>
                 <DialogTitle>Confirm Deletion</DialogTitle>
                 <DialogContent>

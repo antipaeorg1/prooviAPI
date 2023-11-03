@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 
-
+// function to hash password before saving it into the Database(actually array usersData.js)
 const hashPassword = (userPassword, callback) => {
     bcrypt.genSalt(10, (err, salt) => {
         if (err) {

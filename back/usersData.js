@@ -1,3 +1,7 @@
+
+// Array for storing User objects
+// Used instead of Database (beware that dynamic data is lost when server restarts, hardcoded remains!!)
+
 const usersData = [
     {
         firstName: "TestName",
