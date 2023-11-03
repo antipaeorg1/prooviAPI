@@ -42,7 +42,7 @@ const register = async (req, res) => {
         //     .catch((error) => {
         //         res.status(500).json({error: 'Email sending failed', emailError: error});
         //     });
-        res.status(200).json({message: 'user registered!'});
+        res.status(200).json({message: 'Registration successful!'});
 
     } catch (error) {
         console.error(error);

@@ -39,6 +39,7 @@ export default function SignInSide() {
     const [alertIsVisible, setAlertIsVisible] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
     const [severity, setSeverity] = useState('warning');
+
     function showAlert(severity, message) {
         setSeverity(severity);
         setAlertMessage(message);
@@ -79,9 +80,9 @@ export default function SignInSide() {
                 // console.log(JSON.stringify(response.data.accessToken));
                 showAlert('success', "You have been successfully logged in!")
                 sessionStorage.setItem('accessToken', response.data.accessToken);
-                // setTimeout(() => {
-                //     navigate('/')
-                // },3000)
+                setTimeout(() => {
+                    navigate('/users')
+                },3000)
             })
             .catch((error) => {
                 showAlert('error',JSON.stringify(error.response.data.message))

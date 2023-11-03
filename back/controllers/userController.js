@@ -3,6 +3,7 @@ const usersData = require("../usersData");
 const getUserList = (req, res) => {
     try {
         const users = usersData;
+        console.log("users sent to front!")
         res.status(200).json({users});
 
     } catch (error) {
