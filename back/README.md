@@ -44,6 +44,6 @@ POSTMARK=960bc81d-d202-4403-9226-d16e335154ec
 4. Start the server
 
 ```bash
-npm start
+npm run start
 
 
