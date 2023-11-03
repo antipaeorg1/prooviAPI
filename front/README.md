@@ -2,7 +2,7 @@
 
 ## Available Scripts
 
-In the project directory, you can run:
+In the project directory, (package.json file) you can run:
 
 1.To build up application
 ### `npm run install`
