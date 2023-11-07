@@ -10,7 +10,7 @@ const passwordUtil = require('../utils/passwordUtil');
 const register = async (req, res) => {
     try {
         // Registration validation returns an error, (can be password or email related)
-        const registrationError = handleRegistrationValidation(req.body.userEmail, req.body.userPassword);
+        const registrationError = await handleRegistrationValidation(req.body.userEmail, req.body.userPassword);
 
         // If error occurs it will be passed to frontend and code execution ends
         if (registrationError) {
@@ -38,7 +38,7 @@ const register = async (req, res) => {
         });
 
         //Sending email template to registered userEmail
-        emailController.sendEmailTo(req.body.userEmail, 'You have been successfully registered!').then(() => {
+        await emailController.sendEmailTo(req.body.userEmail, 'You have been successfully registered!').then(() => {
             res.status(200).json({message: 'Registration successful!'});
         })
             .catch((error) => {
