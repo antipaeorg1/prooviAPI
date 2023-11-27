@@ -8,7 +8,6 @@ import PrivateRoute from "./PrivateRoute";
 
 
 function App() {
-
     return (
         <Router>
             <Routes>
